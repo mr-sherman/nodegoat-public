@@ -78,11 +78,11 @@ jobs:
           rm -rf $DATABASE_DIR/$SUB_DIR
         done
         echo "Zipping database"
-        DATABASE_ZIP="kendogrid-$LANGUAGE-db.zip"
+        DATABASE_ZIP="nodegoat-$LANGUAGE-db.zip"
         zip -r "$DATABASE_ZIP" "$DATABASE_DIR"
         echo "::set-output name=zip::$DATABASE_ZIP"
     - name: Upload CodeQL database
       uses: actions/upload-artifact@v2
       with:
-        name: kendogrid-${{ matrix.language }}-db
+        name: nodegoat-${{ matrix.language }}-db
         path: ${{ steps.database-cleanup.outputs.zip }}
