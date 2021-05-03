@@ -22,9 +22,6 @@ on:
       - '**/*.txt'
       - '**/*.yml'
       - '**/*.json'
-  schedule:
-    - cron: '22 2 * * 1'
-  
 
 jobs:
   analyze:
