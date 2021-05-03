@@ -87,7 +87,7 @@ jobs:
         zip -r "$DATABASE_ZIP" "$DATABASE_DIR"
         echo "::set-output name=zip::$DATABASE_ZIP"
         echo "copying SARIF"
-        $SARIF_FILE $TARGET_SARIF_FILE
+        cp $SARIF_FILE $TARGET_SARIF_FILE
     - name: Upload CodeQL database
       uses: actions/upload-artifact@v2
       with:
