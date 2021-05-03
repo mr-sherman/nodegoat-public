@@ -93,11 +93,11 @@ jobs:
       with:
         name: nodegoat-${{ matrix.language }}-db
         path: ${{ steps.database-cleanup.outputs.zip }}
-    - name: Upload SARIF File
-      uses: actions/upload-artifact@v2
-      with:
-        name: $TARGET_SARIF_FILE
-        path: ${{ steps.database-cleanup.outputs.zip }}
+#    - name: Upload SARIF File
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: $TARGET_SARIF_FILE
+#        path: ${{ steps.database-cleanup.outputs.zip }}
         
         
         
