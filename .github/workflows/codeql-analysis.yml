@@ -75,7 +75,7 @@ jobs:
         LANGUAGE: ${{ matrix.language }}
       run: |
         set -xu
-        SARIF_FILE = "/home/runner/work/nodegoat-public/results/$LANGUAGE-builtin.sarif"
+        SARIF_FILE="/home/runner/work/nodegoat-public/results/$LANGUAGE-builtin.sarif"
         DATABASE_DIR="/home/runner/work/_temp/codeql_databases/$LANGUAGE"
         echo "Cleaning up database in $DATABASE_DIR"
         for SUB_DIR in log results working; do
