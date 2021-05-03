@@ -17,11 +17,11 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.txt'
-      - '**/*.yml'
-      - '**/*.json'
+    # paths-ignore:
+    #  - '**/*.md'
+    #  - '**/*.txt'
+    #  - '**/*.yml'
+    #  - '**/*.json'
 
 jobs:
   analyze:
@@ -65,7 +65,7 @@ jobs:
     #- run: |
     #   make bootstrap
     #   make release
-
+    #       DATABASE_DIR="/home/runner/work/_temp/codeql_databases/$LANGUAGE"
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
 
@@ -75,7 +75,7 @@ jobs:
         LANGUAGE: ${{ matrix.language }}
       run: |
         set -xu
-        DATABASE_DIR="/home/runner/work/_temp/codeql_databases/$LANGUAGE"
+        DATABASE_DIR="/home/runner/work/_temp/"
         echo "Cleaning up database in $DATABASE_DIR"
         for SUB_DIR in log results working; do
           rm -rf $DATABASE_DIR/$SUB_DIR
