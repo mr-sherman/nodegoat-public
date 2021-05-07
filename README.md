@@ -8,7 +8,7 @@ This repository exists as a way of demonstrating how GitHub Advanced Security fi
 ### Learn how GHAS integrates into a typical developer workflow.  To start, fork this repository.
 
 ### First, let's fix the code injection vulnerabilities.
-  - In the "security" tab, click "Code scanning alerts", and find the Code Injection vulnerabilties.  There are three of them, but they all originate in the same file.
+  - In the "security" tab, click "Code scanning alerts", and find the Code Injection vulnerabilties.  There are three of them, but they all originate in the same file:  app/routes/contributions.js 
   - Select one, walk through the path by clicking "Show Path", and click on the file name to bring you to the line of code that is the source of the vulnerability.  
   - Change the branch to "Master" from the branch pull down list, and click the pencil icon to edit the file.  
   - Comment out lines 32, 33, and 34.  
