@@ -70,7 +70,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
       with:
-        path-ignore: '**/bootstrap/**'
+        path-ignore: '**/bootsrap.js'
 
     - name: Clean up CodeQL database before upload
       id: database-cleanup
