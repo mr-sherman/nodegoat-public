@@ -35,3 +35,24 @@ You can verify this by going into the code scanning alerts screen from the Secur
    - Click "Create Dependabot security update"
    - A pull request will get created - this process may take some time.
    - Merge the pull request to close the dependabot alert.
+   
+## Advanced GHAS Concepts
+The following steps are for security champions, DevSecops personnel or people interested in learning more about CodeQL as a language and tool for security research.
+Before continuing, go to the  [VSCode CodeQL Starter Repo](https://github.com/github/vscode-codeql-starter).  
+ - Follow the instructions in the README.md  there to install the Visual Studio Code extension and set up a starter project for developing your own CodeQL queries.
+ - Download the [CodeQL CLI](https://codeql.github.com/docs/codeql-cli/getting-started-with-the-codeql-cli/) so you will be able to create a CodeQL database of NodeGoat
+ - Create a CodeQL Database for your version of the NodeGoat source code.
+  - From the root of your Nodegoat source code directory Run the command:   codeql database create nodegoat-codeql-db --language=javascript
+  - This will create a folder in your NodeGoat root source directory called "nodegoat-codeql-db"
+ - In the Visual Studio CodeQL Starter Workspace you created in step one, enter the command pallette and type "CodeQL:"  Select "CodeQL:  Choose Database From Folder". 
+ - Navigate to the database folder that was created, "nodegoat-codeql-db".
+ - In Visual Studio Code, go to the CodeQL view.  In the "Databases" section, right click on the nodegoat database and select "Set Current Database"
+ - Create a new file in the starter workspace called "sensitive-info.ql"
+ - At the top of the file type "import java".  You're ready to begin.
+
+
+### Let's hunt for more vulnerabilities:
+  - Your organization wants to meet an industry regulation that states all sensitive user information must be encrypted.  First, we have to find instances where sensitive info exists in the code.
+  - Enter the following query into your sensitive-info.ql file:
+  - Right click on anywhere in the file and select "CodeQL:  Run Query."  This will find all uses of sensitive information like social security number (SSN) and date of birth (DOB)
+  - Next let's find places where that data 
