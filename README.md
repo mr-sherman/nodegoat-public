@@ -53,6 +53,11 @@ Before continuing, go to the  [VSCode CodeQL Starter Repo](https://github.com/gi
 
 ### Let's hunt for more vulnerabilities:
   - Your organization wants to meet an industry regulation that states all sensitive user information must be encrypted.  First, we have to find instances where sensitive info exists in the code.
-  - Enter the following query into your sensitive-info.ql file:
+  - Enter the following query into your sensitive-info.ql file: ```import javascript
+import DataFlow::PathGraph
+
+from  PropAccess pa where pa.getPropertyName().toLowerCase().regexpMatch(".*ssn")
+or pa.getPropertyName().toLowerCase().regexpMatch(".*dob")
+select pa```
   - Right click on anywhere in the file and select "CodeQL:  Run Query."  This will find all uses of sensitive information like social security number (SSN) and date of birth (DOB)
-  - Next let's find places where that data 
+ 
