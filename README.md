@@ -52,7 +52,8 @@ Before continuing, go to the  [VSCode CodeQL Starter Repo](https://github.com/gi
 
 
 ### Let's hunt for more vulnerabilities:
-  - Your organization wants to meet an industry regulation that states all sensitive user information must be encrypted.  First, we have to find instances where sensitive info exists in the code.
+  - Your organization wants to meet an industry regulation that states all sensitive user information must be encrypted.  The user data specification shows that social security number (SSN) and date of birth (DOB) are stored in a database. We can enforce this new regulation with CodeQL.
+  - First, we have to find instances where sensitive info exists in the code.
   - Enter the following query into your sensitive-info.ql file: 
  ```
 import javascript
@@ -63,4 +64,16 @@ or pa.getPropertyName().toLowerCase().regexpMatch(".*dob")
 select pa
 ```
   - Right click on anywhere in the file and select "CodeQL:  Run Query."  This will find all uses of sensitive information like social security number (SSN) and date of birth (DOB)
+  - You should when user.ssn and user.dob get populated.  These need to be encrypted if they're going to get written to a database.  
+  - Let's see if they get written to a database.  Re-write your query to read:
+ ```from DatabaseAccess da
+select da.asExpr()
+```
+  - You can see that through the users.update method call, that the dob and ssn are part of a user update.  But are they encrypted prior to the update?
+  - In order to see if they're encrypted, we need to write a path query, to see if paths exist, from where the SSN or DOB are set in the user object to when they get written to the database without getting encrypted.  Here is the query to accomplish this:
+
+
+
+
+
  
