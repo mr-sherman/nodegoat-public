@@ -27,6 +27,8 @@ You can verify this by going into the code scanning alerts screen from the Secur
   - Uncomment out line 58
   - Create a new branch and pull request and click "Propose Changes".
   - This will start another code scanning process.  The check will fail because this branch introduces new security vulnerabilities, in this instance an "Inefficient Regular Expression".
+  - Now you can fix the offending code by commenting out line 58 and un-commenting out line 59.
+  - This will initiate a new scan, and the security vulnerabilities that were detected before should go away.
 
 
 ### Next, let's fix a vulnerable open source dependency. 
@@ -57,7 +59,6 @@ Before continuing, go to the  [VSCode CodeQL Starter Repo](https://github.com/gi
   - Enter the following query into your sensitive-info.ql file: 
  ```
 import javascript
-import DataFlow::PathGraph
 
 from  PropAccess pa where pa.getPropertyName().toLowerCase().regexpMatch(".*ssn")
 or pa.getPropertyName().toLowerCase().regexpMatch(".*dob")
@@ -66,7 +67,10 @@ select pa
   - Right click on anywhere in the file and select "CodeQL:  Run Query."  This will find all uses of sensitive information like social security number (SSN) and date of birth (DOB)
   - You should when user.ssn and user.dob get populated.  These need to be encrypted if they're going to get written to a database.  
   - Let's see if they get written to a database.  Re-write your query to read:
- ```from DatabaseAccess da
+ ```
+import javascript
+
+from DatabaseAccess da
 select da.asExpr()
 ```
   - You can see that through the users.update method call, that the dob and ssn are part of a user update.  But are they encrypted prior to the update?
@@ -134,6 +138,9 @@ It's time to make sure these vulnerabilities get alerted to the developers.
   languages: ${{ matrix.language }}
   queries: +security-extended, ./queries
 ```
+
+When the code scan completes, a new security alert should be created, this one for your newly found sensitive info. 
+
 
 
 
