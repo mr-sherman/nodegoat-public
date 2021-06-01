@@ -71,6 +71,70 @@ select da.asExpr()
 ```
   - You can see that through the users.update method call, that the dob and ssn are part of a user update.  But are they encrypted prior to the update?
   - In order to see if they're encrypted, we need to write a path query, to see if paths exist, from where the SSN or DOB are set in the user object to when they get written to the database without getting encrypted.  Here is the query to accomplish this:
+```
+/**
+ * @name Sensitive Info Leak
+ * @description sensitive info
+ * @kind path-problem
+ * @tags security
+ *        external/cwe/311
+ * @id sensitive-info
+ * @problem.severity error
+ */
+
+import javascript
+import DataFlow::PathGraph
+
+//this taint tracking configuration tracks social security numbers
+//and dates of birth that do not get encrypted in the database
+class SensitiveInfoConfig extends TaintTracking::Configuration {
+  SensitiveInfoConfig() { this = "SensitiveInfoConfig" }
+
+  //a source is a variable  with ssn or dob
+  override predicate isSource(DataFlow::Node source) {
+    exists(DataFlow::ParameterNode v |
+      v.getName().toLowerCase() in ["ssn", "dob"] and
+      v = source
+    )
+  }
+
+  //a sink is the user record used in a databaes update
+  override predicate isSink(DataFlow::Node sink) {
+    exists(DataFlow::MethodCallNode m | m.getAnArgument() = sink and m.getMethodName() = "update")
+  }
+
+  //help dataflow track from sensitive info to user record
+  override predicate isAdditionalTaintStep(DataFlow::Node pred, DataFlow::Node succ) {
+    exists(DataFlow::PropWrite assn |
+      assn.getBase().getALocalSource() = succ and
+      pred = assn.getRhs()
+    )
+  }
+
+  //a sanitizer is when the data is used as a parameter to the encrypt function
+  override predicate isSanitizer(DataFlow::Node sanitizer) {
+    exists(DataFlow::MethodCallNode m |
+      m.getAnArgument() = sanitizer and m.getMethodName() = "encrypt"
+    )
+  }
+}
+
+from SensitiveInfoConfig cfg, DataFlow::PathNode source, DataFlow::PathNode sink
+where cfg.hasFlowPath(source, sink)
+select sink.getNode(), source, sink, "Sensitive data Exposure"
+```
+Run this query, and you should see that the variables dob and ssn do not get encrypted prior to the database update.
+
+### Let's add this query to the list of codeql queries we're going to automatically run
+It's time to make sure these vulnerabilities get alerted to the developers.  
+ - Save your sensitive-info.ql file as <repo root>/queries/sensitive-info.ql, and push it to your repo.
+ - Update your .github/workflows/codeql-analysis.yml, starting at line 46 to read:
+```
+  with:
+  languages: ${{ matrix.language }}
+  queries: +security-extended, ./queries
+```
+
 
 
 
